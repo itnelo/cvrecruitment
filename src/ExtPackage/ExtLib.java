@@ -2,9 +2,9 @@ package ExtPackage;
 
 public final class ExtLib {
 
-    public static double eval(int a, int p) {
+    public static int eval(int a, int p) {
         ExtLib.rangeCheck(a);
-        return Math.pow(a, p);
+        return (int)Math.pow(a, p);
     }
 
     private static void rangeCheck(int a) throws IllegalArgumentException {

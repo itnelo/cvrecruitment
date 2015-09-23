@@ -1,5 +1,6 @@
 package ru.cvrecruitment;
 
+import java.util.Arrays;
 import java.util.concurrent.*;
 
 public class Test {
@@ -13,11 +14,11 @@ public class Test {
         for (int i = 0; i < data.length; ++i) {
             completionService.submit(new EvalTask(i, data[i], p));
         }
-        pool.shutdown(); // Wait until all tasks done
+        pool.shutdown();
         try {
-            while (!pool.isTerminated()) {
-                final Future<EvalTaskResult> future = completionService.take();
-                EvalTaskResult resultPart = future.get();
+            for (int i = 0; i < data.length; ++i) {
+                EvalTaskResult resultPart = completionService.take().get();
+                System.out.println(resultPart.index + ":" + resultPart.value);
                 result[ resultPart.index ] = resultPart.value;
             }
         } catch (ExecutionException | InterruptedException e) {
@@ -28,9 +29,9 @@ public class Test {
 
     public static void main(String... args) {
 
-        int[] arr = {1, 2, 3};
+        int[] arr = {2, 3, 4};
 
-        System.out.println(Test.evaluate(arr, 2).toString());
+        System.out.println(Arrays.toString(Test.evaluate(arr, 2)));
 
     }
 
