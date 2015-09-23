@@ -5,7 +5,7 @@ import java.util.concurrent.*;
 
 public class Test {
 
-    public static int[] evaluate(int[] data, int p) {
+    public static int[] evaluate(final int[] data, final int p) {
         if (data.length < 1) return data;
         final int[] result = new int[data.length];
         final int cpuCount = Runtime.getRuntime().availableProcessors();
@@ -18,7 +18,6 @@ public class Test {
         try {
             for (int i = 0; i < data.length; ++i) {
                 EvalTaskResult resultPart = completionService.take().get();
-                System.out.println(resultPart.index + ":" + resultPart.value);
                 result[ resultPart.index ] = resultPart.value;
             }
         } catch (ExecutionException | InterruptedException e) {
