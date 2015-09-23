@@ -1,10 +1,21 @@
 package ru.cvrecruitment;
 
-public class EvalTask implements Runnable {
+import java.util.concurrent.Callable;
+import ExtPackage.ExtLib;
+
+public class EvalTask implements Callable<EvalTaskResult> {
+
+    private int input_index;
+    private int input_value;
+
+    public EvalTask(int index, int value) {
+        this.input_index = index;
+        this.input_value = value;
+    }
 
     @Override
-    public void run() {
-
+    public EvalTaskResult call() {
+        return new EvalTaskResult(input_index, ExtLib.eval(input_value, ));
     }
 
 }

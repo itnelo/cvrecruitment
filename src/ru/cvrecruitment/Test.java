@@ -1,33 +1,35 @@
 package ru.cvrecruitment;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import ExtPackage.ExtLib;
-
+import java.util.concurrent.*;
 
 public class Test {
-
-    //private static
 
     public static int[] evaluate(int[] a, int p) {
         if (a.length < 1) return a;
         int[] result = new int[a.length];
-        int cpu_count = Runtime.getRuntime().availableProcessors();
-        ExecutorService es = Executors.newFixedThreadPool(cpu_count);
+        final int cpuCount = Runtime.getRuntime().availableProcessors();
+        final ExecutorService pool = Executors.newFixedThreadPool(cpuCount);
+        final CompletionService<EvalTaskResult> completionService = new ExecutorCompletionService<EvalTaskResult>(pool);
         for (int i = 0; i < a.length; ++i) {
-            es.execute(new EvalTask());
+            completionService.submit(new EvalTask(i, a[i]));
         }
-        es.shutdown(); // Wait until all tasks done
+        pool.shutdown(); // Wait until all tasks done
         try {
-            es.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {
-            // log problem
+            while (!pool.isTerminated()) {
+                final Future<EvalTaskResult> future = completionService.take();
+                EvalTaskResult resultPart = future.get();
+                result[ resultPart.index ] = resultPart.value;
+            }
+        } catch (ExecutionException | InterruptedException ex) {
+            // do something
         }
-        return result_???;
+        return result;
     }
 
-    public static synchronized
+    public static void main(String... args) {
+
+        ;
+
+    }
 
 }
