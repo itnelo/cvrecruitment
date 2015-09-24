@@ -8,4 +8,8 @@ public class EvalTaskResult {
         this.index = index;
         this.value = value;
     }
+
+    public int getValue() {
+        return value;
+    }
 }

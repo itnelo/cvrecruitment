@@ -17,7 +17,20 @@ public class EvalTask implements Callable<EvalTaskResult> {
 
     @Override
     public EvalTaskResult call() {
-        return new EvalTaskResult(input_index, ExtLib.eval(input_value, input_p));
+        int output_value;
+        try {
+            output_value = evalImpl();
+        } catch (Exception e) {
+            // Example 1: new_value = 0 && logger call
+            // Example 2: new_value = input_value (no changes apply)
+            output_value = input_value;
+            //log(...);
+        }
+        return new EvalTaskResult(input_index, output_value);
+    }
+
+    private int evalImpl() {
+        return ExtLib.eval(input_value, input_p);
     }
 
 }

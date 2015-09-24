@@ -5,8 +5,11 @@ import java.util.concurrent.*;
 
 public class Test {
 
+    private static final int[] EMPTY_DATA = {};
+
     public static int[] evaluate(final int[] data, final int p) {
-        if (data.length < 1) return data;
+        if (data.length < 1) return EMPTY_DATA;
+        else if (data.length == 1) return new int[]{ new EvalTask(0, data[0], p).call().getValue() };
         final int[] result = new int[data.length];
         final int cpuCount = Runtime.getRuntime().availableProcessors();
         final ExecutorService pool = Executors.newFixedThreadPool(cpuCount);
@@ -28,7 +31,7 @@ public class Test {
 
     public static void main(String... args) {
 
-        int[] arr = {2, 3, 4};
+        int[] arr = {1, 2, 3, 4, 5};
 
         System.out.println(Arrays.toString(Test.evaluate(arr, 2)));
 
